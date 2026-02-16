@@ -44,10 +44,14 @@ FROM ubuntu:20.04
 ENV LANG en_US.UTF-8
 ENV TZ US/Pacific
 ARG DEBIAN_FRONTEND=noninteractive
+ARG EARTHDATA_USERNAME
+ARG EARTHDATA_PASSWORD
 
 RUN set -ex \
  && apt-get update \
  && apt-get install -y \
+    curl \
+    gdal-bin \
     libfftw3-3 \
     libgdal26 \
     libhdf4-0 \
@@ -58,6 +62,8 @@ RUN set -ex \
     python3-gdal \
     python3-h5py \
     python3-numpy \
+    python3-requests \
+    python3-shapely \
     python3-scipy \
  && echo done
 
@@ -67,3 +73,10 @@ COPY --from=builder /tmp/isce*.deb /tmp/isce2.deb
 RUN dpkg -i /tmp/isce2.deb
 
 RUN ln -s /usr/lib/python3.8/dist-packages/isce2 /usr/lib/python3.8/dist-packages/isce
+
+# Optional: bake Earthdata credentials into /root/.netrc for DEM download tools.
+RUN set -ex \
+ && if [ -n "$CDSE_USERNAME" ] && [ -n "$CDSE_PASSWORD" ]; then \
+      printf "machine dataspace.copernicus.eu\nlogin %s\npassword %s\n" "$CDSE_USERNAME" "$CDSE_PASSWORD" > /root/.netrc; \
+      chmod 600 /root/.netrc; \
+    fi
