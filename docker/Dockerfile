@@ -81,6 +81,8 @@ RUN set -ex \
  && rm -f /tmp/isce2.deb \
  && rm -rf /var/lib/apt/lists/*
 
+RUN ln -s /usr/lib/python3.12/dist-packages/isce2 /usr/lib/python3.12/dist-packages/isce
+
 # Install MintPy in a dedicated virtual environment.
 RUN set -ex \
  && python3 -m venv --system-site-packages $VIRTUAL_ENV \
