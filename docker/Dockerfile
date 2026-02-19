@@ -59,7 +59,7 @@ RUN set -ex \
     ca-certificates \
     curl \
     gdal-bin \
-    libfftw3-3 \
+    libfftw3 \
     python3 \
     python3-gdal \
     python3-h5py \
