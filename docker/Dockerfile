@@ -48,7 +48,8 @@ FROM ubuntu:24.04
 # Set an encoding to make things work smoothly.
 ENV LANG en_US.UTF-8
 ENV TZ US/Pacific
-ENV PATH /opt/venv/bin:$PATH
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH $VIRTUAL_ENV/bin:$PATH
 ARG DEBIAN_FRONTEND=noninteractive
 ARG CDSE_USERNAME
 ARG CDSE_PASSWORD
@@ -82,27 +83,9 @@ RUN set -ex \
 
 # Install MintPy in a dedicated virtual environment.
 RUN set -ex \
- && python3 -m venv /opt/venv \
- && /opt/venv/bin/pip install --no-cache-dir --upgrade pip setuptools wheel \
- && /opt/venv/bin/pip install --no-cache-dir --only-binary=:all: mintpy
-
-# Provide an isce alias for packages expecting `import isce`.
-RUN set -ex \
- && python3 - <<'PY'
-import os
-import site
-
-site_pkgs = site.getsitepackages()[-1]
-src = os.path.join(site_pkgs, 'isce2')
-dst = os.path.join(site_pkgs, 'isce')
-if os.path.isdir(src) and not os.path.exists(dst):
-    os.symlink(src, dst)
-PY
-
-# Quick runtime sanity checks.
-RUN set -ex \
- && python3 -c "import isce" \
- && /opt/venv/bin/python -c "import mintpy"
+ && python3 -m venv --system-site-packages $VIRTUAL_ENV \
+ && $VIRTUAL_ENV/bin/pip install --no-cache-dir --upgrade pip setuptools wheel \
+ && $VIRTUAL_ENV/bin/pip install --no-cache-dir --only-binary=:all: mintpy
 
 # Bake credentials into .netrc
 RUN set -ex \
