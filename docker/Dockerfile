@@ -65,6 +65,7 @@ RUN set -ex \
     python3-requests \
     python3-shapely \
     python3-scipy \
+    python3-matplotlib \
  && echo done
 
 # install ISCE from DEB
