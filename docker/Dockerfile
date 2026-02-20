@@ -61,6 +61,7 @@ RUN set -ex \
     curl \
     gdal-bin \
     libfftw3-double3 \
+    libfftw3-single3 \
     python3 \
     python3-gdal \
     python3-h5py \
