@@ -96,3 +96,7 @@ RUN set -ex \
       printf "machine dataspace.copernicus.eu\nlogin %s\npassword %s\n" "$CDSE_USERNAME" "$CDSE_PASSWORD" >> /root/.netrc; \
       chmod 600 /root/.netrc; \
     fi
+
+RUN set -ex \
+ && printf "url: https://cds.climate.copernicus.eu/api\nkey: 2784e734-e7af-4365-8b5e-e50eeb0c9543" >> /root/.cdsapirc; \
+    chmod 600 /root/.cdsapirc;
