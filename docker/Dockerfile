@@ -100,3 +100,5 @@ RUN set -ex \
 RUN set -ex \
  && printf "url: https://cds.climate.copernicus.eu/api\nkey: 2784e734-e7af-4365-8b5e-e50eeb0c9543" >> /root/.cdsapirc; \
     chmod 600 /root/.cdsapirc;
+
+copy ./contrib /opt/contrib
